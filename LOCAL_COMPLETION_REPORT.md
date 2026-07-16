@@ -1,6 +1,6 @@
 # Local Completion Report — JWST WASP-39 b Transmission-Spectrum Evidence Ladder
 
-Author: Biswajit Jana. This report documents a local Claude Code implementation pass
+Author: Biswajit Jana. This report documents a local implementation pass
 (project 11 of the 30-project pack, `BUILD_FIRST` priority 8.8/10). No git operations
 were performed. Nothing has been published. This is the last project in the
 30-project pack's `BUILD_FIRST` queue. The repository folder is named

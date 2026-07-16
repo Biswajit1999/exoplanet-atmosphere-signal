@@ -8,6 +8,6 @@ The following are starting points, not a substitute for final citation verificat
 - TauREx III framework paper
 - petitRADTRANS framework papers
 
-## Claude requirement
+## Verification requirement
 
 Before finalising `references.bib`, verify each title, author list, year, journal, DOI/arXiv identifier and archive URL against a primary source. If a citation cannot be verified, mark it `TODO_VERIFY` rather than inventing metadata.

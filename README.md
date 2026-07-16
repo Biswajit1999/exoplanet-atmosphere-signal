@@ -12,7 +12,7 @@ A transparent model-comparison bridge; not a full atmospheric retrieval or repla
 
 ## Current state
 
-This is a **Claude Code implementation blueprint**. The repository contains a scientific contract, data/provenance templates, starter Python package, tests, a TeX report skeleton and a React/Tailwind research-page starter. Example values are synthetic and must never be presented as mission results.
+This is a research-project implementation blueprint. The repository contains a scientific contract, data/provenance templates, starter Python package, tests, a TeX report skeleton and a React/Tailwind research-page starter. Example values are synthetic and must never be presented as mission results.
 
 ## Start here
 
@@ -42,7 +42,6 @@ npm run dev
 - `docs/LITERATURE_SEEDS.md`
 - `docs/VALIDATION_CONTRACT.md`
 - `docs/FIGURE_AND_UI_SPEC.md`
-- `CLAUDE_TASK.md`
 
 ## Reproducibility and FAIR practice
 

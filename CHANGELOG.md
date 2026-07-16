@@ -2,4 +2,4 @@
 
 ## 0.1.0
 
-- Initial research and Claude Code implementation blueprint.
+- Initial research and implementation blueprint.
