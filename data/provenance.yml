@@ -1,0 +1,19 @@
+project_title: "JWST WASP-39 b Transmission-Spectrum Evidence Ladder"
+repository: "jwst-wasp39b-evidence-ladder"
+author: "Biswajit Jana"
+data_mode: "real public JWST spectrum products"
+created_utc: "2026-07-13T09:46:17.516715+00:00"
+
+source_products: []
+# Each entry must contain:
+# product_id, source, source_url, retrieved_utc, sha256,
+# file_size_bytes, licence_or_terms, selection_reason
+
+derivation:
+  configuration_file: config/analysis.yml
+  configuration_sha256: TODO_AFTER_IMPLEMENTATION
+  software_commit: LOCAL_UNCOMMITTED
+  scripts: []
+
+assumptions: []
+warnings: []

@@ -1,0 +1,41 @@
+{
+  "title": "JWST WASP-39 b Transmission-Spectrum Evidence Ladder",
+  "repo": "exoplanet-atmosphere-signal",
+  "category": "Exoplanet atmosphere data science",
+  "status": "BUILD_FIRST",
+  "priority": 8.8,
+  "question": "How stable are simple nested-model feature preferences in a real published WASP-39 b transmission spectrum under bootstrap and wavelength-segment sensitivity?",
+  "gap": "A transparent model-comparison bridge; not a full atmospheric retrieval or replacement for TauREx/petitRADTRANS.",
+  "dataMode": "real public JWST NIRSpec G395H spectrum products",
+  "novelty": "A transparent model-comparison bridge; not a full atmospheric retrieval or replacement for TauREx/petitRADTRANS.",
+  "figures": [
+    { "id": "fig01_spectrum_overlays", "label": "Spectrum overlays (data vs. no-CO vs. full model)" },
+    { "id": "fig02_residuals", "label": "Residuals against the no-CO model" },
+    { "id": "fig03_evidence_ladder", "label": "Evidence ladder (AIC/BIC comparison)" },
+    { "id": "fig04_bootstrap_amplitudes", "label": "Bootstrap CI on feature amplitude" },
+    { "id": "fig05_segment_stability", "label": "Leave-one-segment-out sensitivity" }
+  ],
+  "validationContract": [
+    "synthetic injection-recovery gate (known Gaussian feature recovered)",
+    "null control (no feature injected, complex model not preferred)",
+    "weighted chi-square / AIC / BIC evidence ladder",
+    "bootstrap feature-amplitude confidence interval (1000 resamples)",
+    "leave-one-wavelength-segment-out sensitivity check"
+  ],
+  "methodology": "The real, published WASP-39b transmission spectrum and the paper's own best-fit full (with CO) and no-CO nested models (Grant, Lothringer, Wakeford et al. 2023, Zenodo DOI 10.5281/zenodo.7866690) are loaded directly from the deposited netCDF product. A weighted chi-square, AIC and BIC evidence ladder compares the two real published models against the real data (no re-fitting of the physical retrieval). A bootstrap (1000 resamples, seed 20260713) estimates a confidence interval on the mean residual amplitude within the CO absorption band (defined as the wavelength range where the CO-only model component exceeds 10% of its own peak). A leave-one-wavelength-segment-out check splits the native-resolution G395H bandpass into three contiguous segments and re-runs the evidence ladder on each, reporting whether the model preference is stable across the bandpass. Separately, a synthetic flat-continuum vs. flat-plus-Gaussian model pair (models.py, fitting.py) provides a required injection-recovery validation gate independent of the real published models.",
+  "assumptions": [
+    "The no-CO to full-model step is treated as adding exactly 1 effective free parameter (the CO abundance/opacity term); the real published atmospheric retrieval's exact free-parameter count is not recoverable from the netCDF file alone. Documented as a defensible simplification, not a fabricated exact count.",
+    "The native-resolution wavelength grid is split into three contiguous segments as a practical proxy for 'instrument segment', since this is a single-grating (G395H) dataset rather than a multi-instrument spectrum.",
+    "The CO absorption band is operationally defined as wavelengths where the paper's own CO-only model component exceeds 10% of its own peak value, not an independently derived band edge."
+  ],
+  "limitations": [
+    "A transparent model-comparison bridge over the paper's own published models; not a full atmospheric retrieval and not a replacement for TauREx/petitRADTRANS.",
+    "Only one real target (WASP-39b, single visit's reduced spectrum) is available from the 60.3 KB Zenodo product actually used; the originally-scoped larger multi-target Zenodo deposit (10.5281/zenodo.10161743, 1.74 GB) was rejected as too large for a bounded first release.",
+    "reports/report.tex could not be compiled to PDF in this environment (no local LaTeX toolchain); only structural completeness and real-number substitution were verified."
+  ],
+  "citation": {
+    "author": "Biswajit Jana",
+    "license": "BSD-3-Clause (original code); mission/archive products retain their original terms",
+    "repository": "https://github.com/Biswajit1999/exoplanet-atmosphere-signal"
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "figure": "fig05_segment_stability",
+  "data_kind": "real WASP-39b JWST NIRSpec spectrum",
+  "sample_size": 1008,
+  "units": "AIC units",
+  "git_commit": "LOCAL_UNCOMMITTED",
+  "config_sha256": "9980c1f60ff8d0c1325a767dce47d27d067e56653050f84848cdebc29688f41f",
+  "package_version": "0.1.0",
+  "python_version": "3.9.19"
+}

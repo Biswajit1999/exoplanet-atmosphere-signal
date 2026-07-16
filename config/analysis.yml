@@ -1,0 +1,28 @@
+project:
+  title: "JWST WASP-39 b Transmission-Spectrum Evidence Ladder"
+  repository: "exoplanet-atmosphere-signal"
+  author: "Biswajit Jana"
+  curation_status: "BUILD_FIRST"
+  priority: 8.8
+
+execution:
+  seed: 20260713
+  output_directory: results
+  overwrite: false
+  fail_on_warning: false
+
+input:
+  data_mode: "real public JWST spectrum products"
+  manifest: data/manifest.csv
+  raw_directory: data/raw
+  example_directory: data/example
+
+validation:
+  minimum_sample_size: 30
+  bootstrap_resamples: 1000
+  confidence_level: 0.95
+
+provenance:
+  record_environment: true
+  record_git_commit: true
+  verify_checksums: true

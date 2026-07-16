@@ -1,0 +1,14 @@
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.ipynb_checkpoints/
+data/raw/*
+!data/raw/README.md
+results/
+web-react/node_modules/
+web-react/dist/
+_PROJECT_LOG.md
+.env*

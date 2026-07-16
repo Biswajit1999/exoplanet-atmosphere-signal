@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1500" height="500" viewBox="0 0 1500 500">
+<defs><linearGradient id="g" x1="0" x2="1"><stop stop-color="#07111f"/><stop offset="1" stop-color="#111827"/></linearGradient><pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M40 0H0V40" fill="none" stroke="#334155" stroke-opacity=".22"/></pattern></defs>
+<rect width="1500" height="500" fill="url(#g)"/><rect width="1500" height="500" fill="url(#grid)"/>
+<circle cx="1290" cy="130" r="185" fill="none" stroke="#22d3ee" stroke-opacity=".26" stroke-width="2"/><circle cx="1290" cy="130" r="120" fill="none" stroke="#f59e0b" stroke-opacity=".22"/>
+<text x="80" y="90" fill="#67e8f9" font-family="Arial,sans-serif" font-size="24" letter-spacing="5">BUILD_FIRST</text>
+<text x="80" y="165" fill="#f8fafc" font-family="Arial,sans-serif" font-size="48" font-weight="700">JWST WASP-39 b Transmission-Spectrum Evidence Ladder</text>
+<text x="80" y="240" fill="#cbd5e1" font-family="Arial,sans-serif" font-size="23"><tspan x="80" dy="32">How stable are simple nested-model feature preferences in public WASP-39 b</tspan><tspan x="80" dy="32">transmission spectra under bootstrap and instrument-segment sensitivity?</tspan></text>
+<text x="80" y="445" fill="#94a3b8" font-family="Arial,sans-serif" font-size="18">RESEARCH BLUEPRINT · SYNTHETIC VALUES ARE NOT SCIENTIFIC RESULTS</text>
+</svg>
