@@ -54,6 +54,78 @@ function Section({ icon: Icon, title, children }) {
   );
 }
 
+
+function inverseNormalCDF(p) {
+  if (p <= 0 || p >= 1) return NaN;
+  const a = [-3.969683028665376e+01, 2.209460984245205e+02, -2.759285104469687e+02, 1.383577518672690e+02, -3.066479806614716e+01, 2.506628277459239e+00];
+  const b = [-5.447609879822406e+01, 1.615858368580409e+02, -1.556989798598866e+02, 6.680131188771972e+01, -1.328068155288572e+01];
+  const c = [-7.784894002430293e-03, -3.223964580411365e-01, -2.400758277161838e+00, -2.549732539343734e+00, 4.374664141464968e+00, 2.938163982698783e+00];
+  const d = [7.784695709041462e-03, 3.224671290700398e-01, 2.445134137142996e+00, 3.754408661907416e+00];
+  const pLow = 0.02425, pHigh = 1 - pLow;
+  let q, r;
+  if (p < pLow) {
+    q = Math.sqrt(-2 * Math.log(p));
+    return (((((c[0]*q+c[1])*q+c[2])*q+c[3])*q+c[4])*q+c[5]) / ((((d[0]*q+d[1])*q+d[2])*q+d[3])*q+1);
+  } else if (p <= pHigh) {
+    q = p - 0.5; r = q * q;
+    return (((((a[0]*r+a[1])*r+a[2])*r+a[3])*r+a[4])*r+a[5])*q / (((((b[0]*r+b[1])*r+b[2])*r+b[3])*r+b[4])*r+1);
+  } else {
+    q = Math.sqrt(-2 * Math.log(1 - p));
+    return -(((((c[0]*q+c[1])*q+c[2])*q+c[3])*q+c[4])*q+c[5]) / ((((d[0]*q+d[1])*q+d[2])*q+d[3])*q+1);
+  }
+}
+
+function ConfidenceExplorer({ metrics }) {
+  const withCI = (metrics || []).filter((m) => m.uncertainty_low != null && m.uncertainty_high != null);
+  const [selected, setSelected] = useState(null);
+  const [confidence, setConfidence] = useState(95);
+  useEffect(() => { if (!selected && withCI.length > 0) setSelected(withCI[0].name); }, [withCI, selected]);
+  if (withCI.length === 0) return null;
+  const metric = withCI.find((m) => m.name === selected) ?? withCI[0];
+  const z95 = 1.959963984540054;
+  const halfWidth95 = (metric.uncertainty_high - metric.uncertainty_low) / 2;
+  const sigma = halfWidth95 / z95;
+  const zLevel = inverseNormalCDF(0.5 + confidence / 200);
+  const lo = metric.estimate - zLevel * sigma;
+  const hi = metric.estimate + zLevel * sigma;
+  return (
+    <Section icon={Beaker} title="Confidence-level explorer">
+      <p className="mb-4 text-xs text-slate-500">
+        Recomputes an approximate confidence interval at any level from this metric's reported 95%
+        bootstrap interval, assuming a normal sampling distribution. This is a client-side
+        approximation for exploring sensitivity around the real result &mdash; it does not
+        re-run the bootstrap; the 95% CI shown in the metric cards above is the actual computed
+        result from <code>uncertainty.py</code>.
+      </p>
+      {withCI.length > 1 && (
+        <select
+          className="mb-4 w-full rounded-lg border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-200"
+          value={metric.name}
+          onChange={(e) => setSelected(e.target.value)}
+        >
+          {withCI.map((m) => <option key={m.name} value={m.name}>{m.name.replace(/_/g, ' ')}</option>)}
+        </select>
+      )}
+      <label className="flex items-center justify-between text-sm text-slate-300">
+        <span>Confidence level</span>
+        <span className="font-mono">{confidence.toFixed(1)}%</span>
+      </label>
+      <input
+        type="range" min="50" max="99.9" step="0.1" value={confidence}
+        onChange={(e) => setConfidence(Number(e.target.value))}
+        className="mt-2 w-full accent-cyan-500"
+      />
+      <p className="mt-4 text-2xl font-semibold">
+        [{lo.toPrecision(4)}, {hi.toPrecision(4)}]
+        <span className="ml-2 text-sm font-normal text-slate-400">{metric.units}</span>
+      </p>
+      <p className="mt-1 text-xs text-slate-500">
+        estimate {metric.estimate.toPrecision(4)}, n = {metric.sample_size}
+      </p>
+    </Section>
+  );
+}
+
 export default function App() {
   const project = useJson('./project.json');
   const summary = useJson('./results/summary.json');
@@ -111,6 +183,10 @@ export default function App() {
               <p className="mt-1 text-xs text-slate-500">Run scripts/run_analysis.py first.</p>
             </article>
           )}
+        </section>
+
+        <section className="mt-6 grid gap-6 lg:grid-cols-2">
+          <ConfidenceExplorer metrics={summary.data?.metrics} />
         </section>
 
         <section className="mt-6 grid gap-6 lg:grid-cols-[1.5fr_1fr]">
