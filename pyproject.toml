@@ -6,12 +6,14 @@ build-backend = "setuptools.build_meta"
 name = "exoplanet-atmosphere-signal"
 version = "0.1.0"
 description = "Publication-grade computational science starter repository."
+authors = [{ name = "Biswajit Jana", email = "biswajitj998@gmail.com" }]
 requires-python = ">=3.11,<3.13"
 dependencies = [
   "numpy==1.26.4",
   "scipy==1.13.1",
   "pandas==2.2.2",
   "matplotlib==3.9.0",
+  "SciencePlots==2.1.1",
   "pyyaml==6.0.1",
   "astropy==6.1.0",
   "requests==2.32.3",
@@ -43,5 +45,5 @@ target-version = "py311"
 python_version = "3.11"
 
 [[tool.mypy.overrides]]
-module = ["astropy.*", "scipy.*", "netCDF4.*"]
+module = ["astropy.*", "scipy.*", "netCDF4.*", "scienceplots.*"]
 ignore_missing_imports = true

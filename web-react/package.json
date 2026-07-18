@@ -2,6 +2,7 @@
   "name": "exoplanet-atmosphere-signal-web",
   "private": true,
   "version": "0.1.0",
+  "author": "Biswajit Jana",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -10,11 +11,13 @@
     "lint": "eslint ."
   },
   "dependencies": {
+    "@react-three/fiber": "8.17.10",
     "@vitejs/plugin-react": "4.3.1",
     "vite": "5.4.8",
     "react": "18.3.1",
     "react-dom": "18.3.1",
-    "lucide-react": "0.468.0"
+    "lucide-react": "0.468.0",
+    "three": "0.169.0"
   },
   "devDependencies": {
     "tailwindcss": "3.4.13",

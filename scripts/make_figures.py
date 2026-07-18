@@ -10,9 +10,11 @@ import platform
 from pathlib import Path
 
 import matplotlib
+
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import numpy as np
+import scienceplots  # noqa: F401 - importing registers the SciencePlots styles
 
 from jwst_wasp39b_evidence_ladder import __version__ as PACKAGE_VERSION
 from jwst_wasp39b_evidence_ladder.config import load_config
@@ -21,6 +23,8 @@ from jwst_wasp39b_evidence_ladder.io import WASP39bSpectrum, load_spectrum
 from jwst_wasp39b_evidence_ladder.metrics import evidence_ladder
 from jwst_wasp39b_evidence_ladder.provenance import get_git_commit, read_manifest, sha256_config
 from jwst_wasp39b_evidence_ladder.synthetic import SyntheticSpectrumSpec, make_synthetic_spectrum
+
+plt.style.use(["science", "no-latex"])
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 FIGURES_DIR = REPO_ROOT / "figures"
@@ -41,7 +45,7 @@ def _sidecar(name: str, data_kind: str, sample_size: int, units: str, config_pat
 
 def _save(fig, name: str, data_kind: str, sample_size: int, units: str, config_path: Path) -> None:
     FIGURES_DIR.mkdir(parents=True, exist_ok=True)
-    fig.savefig(FIGURES_DIR / f"{name}.svg")
+    fig.savefig(FIGURES_DIR / f"{name}.svg", dpi=180)
     fig.savefig(FIGURES_DIR / f"{name}.png", dpi=300)
     plt.close(fig)
     sidecar = _sidecar(name, data_kind, sample_size, units, config_path)
