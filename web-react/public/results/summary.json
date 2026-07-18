@@ -1,0 +1,56 @@
+{
+  "project": "exoplanet-atmosphere-signal",
+  "data_kind": "real WASP-39b JWST NIRSpec spectrum",
+  "metrics": [
+    {
+      "name": "chi2_no_feature_model",
+      "estimate": 1230.090839727976,
+      "uncertainty_low": null,
+      "uncertainty_high": null,
+      "units": "chi-square",
+      "sample_size": 1
+    },
+    {
+      "name": "chi2_full_model",
+      "estimate": 1154.4369246330962,
+      "uncertainty_low": null,
+      "uncertainty_high": null,
+      "units": "chi-square",
+      "sample_size": 1
+    },
+    {
+      "name": "delta_aic",
+      "estimate": 73.65391509487972,
+      "uncertainty_low": null,
+      "uncertainty_high": null,
+      "units": "AIC units",
+      "sample_size": 1
+    },
+    {
+      "name": "delta_bic",
+      "estimate": 68.73819164624842,
+      "uncertainty_low": null,
+      "uncertainty_high": null,
+      "units": "BIC units",
+      "sample_size": 1
+    },
+    {
+      "name": "feature_amplitude_mean_residual_in_co_band",
+      "estimate": 0.0001936254564932402,
+      "uncertainty_low": 0.00013530898148380092,
+      "uncertainty_high": 0.0002519419315026795,
+      "units": "transit depth (Rp/Rs)^2",
+      "sample_size": 1
+    }
+  ],
+  "provenance": {
+    "git_commit": "LOCAL_UNCOMMITTED",
+    "config_sha256": "9980c1f60ff8d0c1325a767dce47d27d067e56653050f84848cdebc29688f41f",
+    "package_version": "0.1.0",
+    "python_version": "3.9.19",
+    "platform": "Windows-10-10.0.26200-SP0"
+  },
+  "warnings": [
+    "preferred_model (full spectrum): complex; segment preferences: ['simple', 'complex', 'complex'] (2/3 segments favour the CO model)"
+  ]
+}

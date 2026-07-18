@@ -1,0 +1,13 @@
+[
+  {
+    "label": "real_data",
+    "wall_time_seconds": 0.18879439999999997,
+    "peak_memory_mib": 0.9200067520141602,
+    "peak_memory_method": "tracemalloc (Python-level allocations, not full process RSS)",
+    "dataset_size": 1,
+    "python_version": "3.9.19 (main, May  6 2024, 20:12:36) [MSC v.1916 64 bit (AMD64)]",
+    "platform": "Windows-10-10.0.26200-SP0",
+    "processor": "Intel64 Family 6 Model 141 Stepping 1, GenuineIntel",
+    "package_version": "0.1.0"
+  }
+]

@@ -7,7 +7,7 @@ __pycache__/
 .ipynb_checkpoints/
 data/raw/*
 !data/raw/README.md
-results/
+/results/
 web-react/node_modules/
 web-react/dist/
 _PROJECT_LOG.md
