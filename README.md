@@ -64,3 +64,7 @@ Biswajit Jana
 ## Licence
 
 BSD-3-Clause for original code. Mission/archive products retain their original terms.
+
+## Research Quality Upgrade
+
+See [RESEARCH_QUALITY.md](RESEARCH_QUALITY.md) for the validation layer, reference anchors, equations and research boundaries added to this repository.

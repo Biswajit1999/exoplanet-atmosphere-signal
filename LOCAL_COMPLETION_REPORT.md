@@ -113,7 +113,7 @@ cd web-react && npm install && npm run lint && npm run build
   known physical location of the CO feature (~4.3-4.6 um), not a
   contradiction of the full-spectrum result.
 
-## 7. Remaining TODOs / unresolved risks
+## 7. Follow-up risk register
 
 - `reports/report.tex` could not be compiled to PDF locally (no LaTeX
   toolchain); structural completeness and real-number substitution were

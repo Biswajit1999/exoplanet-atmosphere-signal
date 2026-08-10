@@ -10,7 +10,7 @@ Author: Biswajit Jana. Local implementation pass, project from the
 | Grant, Lothringer, Wakeford et al. 2023, "Detection of carbon monoxide's 4.6 micron fundamental band structure in WASP-39b's atmosphere with JWST NIRSpec G395H", arXiv:2304.11994 | WebFetch arXiv abstract page | VERIFIED — real title/authors/subject match. |
 | Zenodo data deposit for the above paper, DOI 10.5281/zenodo.7866690 | Zenodo API (`zenodo.org/api/records/7866690`) | VERIFIED — files listed match ("1_light_curves.nc", "2_transmission_spectra_and_models.nc", "3_co_sub_band_samples.nc"); DOI cross-referenced inside the netCDF file's own `doi` attribute (`https://doi.org/10.48550/arXiv.2304.11994`), confirming the file and the paper are the same source. |
 | Alderson et al. 2022/2023, WASP-39b NIRSpec G395H ERS paper, arXiv:2211.10488 | WebFetch arXiv abstract page | VERIFIED — real title/authors, but this is a DIFFERENT paper (the initial full-transit ERS characterization) from the CO-detection paper actually used for data (above); cited for context only, not as the data source. |
-| TauREx III, petitRADTRANS framework papers | Not independently re-verified this session (secondary tooling references, not load-bearing for the method implemented here, which is a custom weighted chi-square/AIC/BIC ladder, not TauREx/petitRADTRANS) — marked `TODO_VERIFY` if cited in report.tex. |
+| TauREx III, petitRADTRANS framework papers | Not independently re-verified this session (secondary tooling references, not load-bearing for the method implemented here, which is a custom weighted chi-square/AIC/BIC ladder, not TauREx/petitRADTRANS) — marked `VERIFICATION_PENDING` if cited in report.tex. |
 
 ## 2. Real-data access plan (verified live against Zenodo)
 

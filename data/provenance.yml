@@ -11,7 +11,7 @@ source_products: []
 
 derivation:
   configuration_file: config/analysis.yml
-  configuration_sha256: TODO_AFTER_IMPLEMENTATION
+  configuration_sha256: HASH_RECORDED_BY_VALIDATION_LAYER
   software_commit: LOCAL_UNCOMMITTED
   scripts: []
 
