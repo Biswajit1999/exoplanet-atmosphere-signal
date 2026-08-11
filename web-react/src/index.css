@@ -82,15 +82,14 @@ a { color: inherit; }
 .explorer-controls > p { margin: 0.7rem 0 0; color: #57766f; font-family: 'DM Mono', monospace; font-size: 0.51rem; }
 .explorer-empty { margin-top: 1rem; padding: 1.4rem; border: 1px solid #31544d; color: #718f88; font-size: 0.72rem; }
 
-.spectra-mosaic { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); grid-auto-rows: minmax(280px, auto); gap: 1rem; }
+.spectra-mosaic { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); grid-auto-rows: auto; gap: 1rem; align-items: start; }
 .spectrum-card { display: grid; min-width: 0; margin: 0; padding: 1rem; border: 1px solid #264e47; background: #071916; }
 .spectrum-1 { grid-row: span 2; }
 .spectrum-5 { grid-column: span 2; }
 .spectrum-card > div { display: flex; align-items: center; gap: 0.8rem; margin-bottom: 0.8rem; font-family: 'DM Mono', monospace; }
 .spectrum-card > div span { color: #7ce5c9; font-family: 'Newsreader', serif; font-size: 1.7rem; font-style: italic; }
 .spectrum-card > div i { overflow: hidden; color: #4f786e; font-size: 0.49rem; font-style: normal; text-overflow: ellipsis; white-space: nowrap; }
-.spectrum-card img { display: block; width: 100%; min-height: 240px; background: #fff; object-fit: contain; }
-.spectrum-1 img { min-height: 610px; }
+.spectrum-card img { display: block; width: 100%; height: auto; background: #fff; object-fit: contain; }
 .spectrum-card figcaption { margin-top: 0.8rem; color: #9ab8b0; font-size: 0.73rem; }
 
 .provenance-ribbon { display: grid; grid-template-columns: minmax(320px, 0.8fr) minmax(500px, 1.2fr); border: 1px solid #28554c; background: rgba(7, 26, 23, 0.75); }
@@ -190,7 +189,6 @@ a { color: inherit; }
   .explorer-copy { border-right: 0; border-bottom: 1px solid #29564d; }
   .spectra-mosaic { grid-template-columns: 1fr; }
   .spectrum-1, .spectrum-5 { grid-row: auto; grid-column: auto; }
-  .spectrum-1 img { min-height: 300px; }
   .provenance-ribbon dl { grid-template-columns: 1fr; }
   .provenance-ribbon dl > div { border-right: 0; border-bottom: 1px solid #23483f; }
   .validation-flow { grid-template-columns: 1fr; }
