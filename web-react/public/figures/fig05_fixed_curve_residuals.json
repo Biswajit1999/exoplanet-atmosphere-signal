@@ -3,7 +3,7 @@
   "caption": "Standardised residuals for archived fixed curves; not an information-criterion comparison.",
   "data_kind": "archived JWST/NIRSpec G395H products",
   "sample_size": 1008,
-  "git_commit": "35d81d6ddafe66bc41982a05d3d83ad6a5100cfb",
+  "git_commit": "919307709ee6a4197cb1d847b9bdb1a5dc18f230",
   "config_sha256": "944fdfa200de74c15c33c5352f6340f158aaa0078b25ec33d38ded8bc518db7d",
   "package_version": "2.0.0",
   "python_version": "3.12.14"

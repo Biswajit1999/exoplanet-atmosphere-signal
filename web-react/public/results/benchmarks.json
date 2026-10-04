@@ -31,5 +31,16 @@
     "platform": "Windows-11-10.0.26200-SP0",
     "processor": "Intel64 Family 6 Model 141 Stepping 1, GenuineIntel",
     "package_version": "2.0.0"
+  },
+  {
+    "label": "real_data",
+    "wall_time_seconds": 2.777081000007456,
+    "peak_memory_mib": 0.8515787124633789,
+    "peak_memory_method": "tracemalloc (Python-level allocations, not full process RSS)",
+    "dataset_size": 256,
+    "python_version": "3.12.14 (main, Aug 25 2026, 14:01:42) [MSC v.1944 64 bit (AMD64)]",
+    "platform": "Windows-11-10.0.26200-SP0",
+    "processor": "Intel64 Family 6 Model 141 Stepping 1, GenuineIntel",
+    "package_version": "2.0.0"
   }
 ]
