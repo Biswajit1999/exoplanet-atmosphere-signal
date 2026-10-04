@@ -96,7 +96,9 @@ def main() -> None:
     axes[0].scatter(spectrum.wavelength_um, residual_no, s=5, color=BLUE, alpha=.5)
     axes[1].scatter(spectrum.wavelength_um, residual_full, s=5, color=RED, alpha=.5)
     for ax, label, chi in zip(axes, ("no-CO archived curve", "full archived curve"), (target.fixed_curves.chi2_per_point_no_co, target.fixed_curves.chi2_per_point_full)):
-        ax.axhline(0, color=INK, lw=.7); ax.set_ylabel("Residual / σ"); ax.text(.01, .88, f"{label}; χ²/N={chi:.3f}", transform=ax.transAxes, fontsize=8)
+        ax.axhline(0, color=INK, lw=.7)
+        ax.set_ylabel("Residual / σ")
+        ax.text(.01, .88, f"{label}; χ²/N={chi:.3f}", transform=ax.transAxes, fontsize=8)
     axes[1].set_xlabel("Wavelength (µm)")
     axes[0].set_title("Fixed-curve residual diagnostic (descriptive; models not refit)")
     save(fig, "fig05_fixed_curve_residuals", "Standardised residuals for archived fixed curves; not an information-criterion comparison.", 1008, config_path)
