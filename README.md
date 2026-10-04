@@ -1,70 +1,51 @@
-# JWST WASP-39 b Transmission-Spectrum Evidence Ladder
+# Carbon monoxide in WASP-39 b
 
-![Cover](docs/cover.png)
+A transparent computational reproduction of the JWST/NIRSpec G395H CO sub-band experiment reported by Grant et al. (2023). The repository ships the complete three-file Zenodo record, verifies every product by SHA-256, reproduces the paper's released-array contrast, and adds deterministic sensitivity analyses.
 
-> **Curation:** `BUILD_FIRST` · Priority 8.8/10 · real public JWST spectrum products
+## Result
 
-## Scientific question
+The 111 released in-band samples have a mean transit depth **263.66 ± 67.68 ppm** greater than the 145 released out-of-band samples (Welch unequal-variance t = 3.895; one-sided p = 6.30 × 10⁻⁵). A 10,000-resample within-group bootstrap gives a 95% interval of **130.38–394.03 ppm**.
 
-How stable are simple nested-model feature preferences in a real published WASP-39 b transmission spectrum under bootstrap and wavelength-segment sensitivity?
+This matches the article's quoted 264 ± 68 ppm result. It is a reproduction from the authors' derived products, not a new detector-level reduction or an independent blind molecular search.
 
-## What this repository contributes
+## Robustness and diagnostics
 
-A transparent model-comparison bridge; not a full atmospheric retrieval or replacement for TauREx/petitRADTRANS.
+- The 4.4–4.7 µm and 4.7–5.0 µm zones both retain positive contrasts: 363.27 and 196.46 ppm.
+- Deleting each contiguous selected wavelength run in turn gives an estimate range of 244.7–280.3 ppm.
+- An exploratory 20,000-draw label permutation gives p = 1.00 × 10⁻⁴, subject to its exchangeability assumption.
+- The archived full curve improves χ² by 75.65 relative to the archived no-CO curve, but both are fixed products rather than models refit by this repository. No AIC, BIC, Bayes factor, abundance posterior, or detection significance is inferred from that difference.
 
-## Key result
+The deposited sub-band file contains 111 in-band and 145 out-of-band values; the article text reports 111 and 148. The pipeline uses the archived arrays unchanged and records this discrepancy in every result bundle.
 
-Using the real, published WASP-39b transmission spectrum and the paper's own full (with CO) and no-CO nested best-fit models (Grant, Lothringer, Wakeford et al. 2023, Zenodo DOI 10.5281/zenodo.7866690), a weighted chi-square/AIC/BIC evidence ladder strongly prefers the CO model over the full 3.82–5.16 μm spectrum (1008 real wavelength points): ΔAIC = 73.65, ΔBIC = 68.74 — both far above the conventional "strong evidence" threshold of 6, consistent with the paper's own CO detection. A bootstrap 95% confidence interval on the mean residual amplitude in the CO absorption band excludes zero: [1.35, 2.52] × 10⁻⁴ in transit-depth units. In a leave-one-wavelength-segment-out check, 2 of 3 independent segments individually favour the CO model; the one that does not (the low-wavelength third, mostly blueward of the CO band) is consistent with the known physical location of the feature (~4.3–4.6 μm), not a contradiction of the full-spectrum result. The synthetic injection-recovery gate passed in both directions (known feature recovered; null control does not spuriously prefer the complex model).
-
-## Reproducing this result
+## Reproduce
 
 ```bash
 python -m venv .venv
-# Windows PowerShell
-.venv\Scripts\Activate.ps1
+# Windows: .venv\Scripts\Activate.ps1
+# POSIX: source .venv/bin/activate
 python -m pip install -e ".[dev]"
 pytest -q
-python scripts/run_analysis.py --demo
-python scripts/make_figures.py --demo
+python scripts/run_analysis.py
+python scripts/make_figures.py
+python scripts/sync_web_assets.py
 ```
 
-The demo path above uses clearly-labelled synthetic data for a fast smoke test. The real-data result quoted above requires downloading the real archive product first (`python scripts/fetch_data.py --i-have-authorization`), then `python scripts/run_analysis.py` and `python scripts/make_figures.py` without `--demo`.
-
-For the web dashboard:
+The inputs are already committed under `data/raw/`. To refetch the upstream record deliberately:
 
 ```bash
-cd web-react
-npm install
-npm run dev
+python scripts/fetch_data.py --i-have-authorization
 ```
 
-## Research documentation
+## Scientific scope
 
-- `CURATION_STATUS.md`
-- `docs/RESEARCH_BLUEPRINT.md`
-- `docs/DATASET_PLAN.md`
-- `docs/LITERATURE_SEEDS.md`
-- `docs/VALIDATION_CONTRACT.md`
-- `docs/FIGURE_AND_UI_SPEC.md`
+Primary estimand: the mean transit-depth difference between the authors' model-selected CO in-bands and comparison bands. Primary test: a one-sided Welch unequal-variance t-test in the physical direction specified by the paper. The bootstrap, permutation, wavelength-zone, and contiguous-run analyses are robustness checks; they do not change the estimand.
 
-## Reproducibility and FAIR practice
+Neighbouring spectral pixels may be correlated, band selection is model-informed, and the workflow starts from released derived spectra. These boundaries are described in `data/provenance.yml` and surfaced in the web report.
 
-All real inputs require product IDs, retrieval times, checksums, source terms and deterministic selection manifests. Derived results record the software commit and configuration hash.
+## Data and citation
 
-## Limitations
+- Grant et al. (2023), *Detection of Carbon Monoxide's 4.6 micron Fundamental Band Structure in WASP-39b's Atmosphere with JWST NIRSpec G395H*, ApJL 956 L32, [doi:10.3847/2041-8213/acfc3b](https://doi.org/10.3847/2041-8213/acfc3b)
+- Released products: [Zenodo 10.5281/zenodo.7866690](https://doi.org/10.5281/zenodo.7866690)
+- File-level provenance and checksums: `data/manifest.csv`
 
-- A transparent model-comparison bridge over the paper's own published models; not a full atmospheric retrieval and not a replacement for TauREx/petitRADTRANS.
-- Only one real target (a single reduced-visit spectrum) is available from the 60.3 KB Zenodo product used; a much larger originally-scoped Zenodo deposit (1.74 GB) was rejected as too large for a bounded first release.
-- The no-CO → full-model step is treated as adding exactly 1 effective free parameter, a documented simplification rather than the real retrieval's exact parameter count.
-
-## Author
-
-Biswajit Jana
-
-## Licence
-
-BSD-3-Clause for original code. Mission/archive products retain their original terms.
-
-## Research Quality Upgrade
-
-See [RESEARCH_QUALITY.md](RESEARCH_QUALITY.md) for the validation layer, reference anchors, equations and research boundaries added to this repository.
+Original repository code is licensed under the repository `LICENSE`. Archived research products retain the terms stated by their source record.

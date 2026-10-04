@@ -1,11 +1,25 @@
 cff-version: 1.2.0
 message: "If you use this software, please cite it using these metadata."
-title: "JWST WASP-39 b Transmission-Spectrum Evidence Ladder"
+title: "Carbon monoxide in WASP-39 b: a computational reproduction"
 type: software
 authors:
   - family-names: Jana
     given-names: Biswajit
-version: 0.1.0
-date-released: 2026-07-13
+version: 2.0.0
+date-released: 2026-10-04
 repository-code: "https://github.com/Biswajit1999/exoplanet-atmosphere-signal"
 license: BSD-3-Clause
+keywords:
+  - exoplanet atmospheres
+  - JWST
+  - NIRSpec
+  - reproducible research
+  - carbon monoxide
+references:
+  - type: article
+    title: "Detection of Carbon Monoxide's 4.6 micron Fundamental Band Structure in WASP-39b's Atmosphere with JWST NIRSpec G395H"
+    authors:
+      - family-names: Grant
+        given-names: David
+    year: 2023
+    doi: "10.3847/2041-8213/acfc3b"
