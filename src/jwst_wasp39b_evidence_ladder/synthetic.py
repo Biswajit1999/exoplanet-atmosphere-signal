@@ -34,11 +34,13 @@ class SyntheticSpectrum:
 
 
 def make_synthetic_spectrum(
-    spec: SyntheticSpectrumSpec = SyntheticSpectrumSpec(), seed: int = 20260713, inject_feature: bool = True
+    spec: SyntheticSpectrumSpec | None = None, seed: int = 20260713, inject_feature: bool = True
 ) -> SyntheticSpectrum:
     """Generate a synthetic transmission spectrum with (or without, for the
     null-control test) a known injected Gaussian absorption feature.
     """
+    if spec is None:
+        spec = SyntheticSpectrumSpec()
     rng = np.random.default_rng(seed)
     wavelength = np.linspace(spec.wavelength_min_um, spec.wavelength_max_um, spec.n_points)
     err = np.full(spec.n_points, spec.noise_sigma)

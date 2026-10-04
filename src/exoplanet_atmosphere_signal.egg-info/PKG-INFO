@@ -2,12 +2,14 @@ Metadata-Version: 2.4
 Name: exoplanet-atmosphere-signal
 Version: 0.1.0
 Summary: Publication-grade computational science starter repository.
+Author-email: Biswajit Jana <biswajitj998@gmail.com>
 Requires-Python: <3.13,>=3.11
 License-File: LICENSE
 Requires-Dist: numpy==1.26.4
 Requires-Dist: scipy==1.13.1
 Requires-Dist: pandas==2.2.2
 Requires-Dist: matplotlib==3.9.0
+Requires-Dist: SciencePlots==2.1.1
 Requires-Dist: pyyaml==6.0.1
 Requires-Dist: astropy==6.1.0
 Requires-Dist: requests==2.32.3

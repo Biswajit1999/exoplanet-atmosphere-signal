@@ -1,8 +1,8 @@
 {
   "name": "exoplanet-atmosphere-signal",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "private": false,
-  "description": "Research-quality validation wrapper.",
+  "description": "Integrity validation for the WASP-39 b CO reproduction.",
   "scripts": {
     "validate:research": "node scripts/validate_repository.mjs",
     "check": "node scripts/validate_repository.mjs"

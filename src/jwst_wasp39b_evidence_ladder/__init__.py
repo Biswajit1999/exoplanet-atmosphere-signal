@@ -1,3 +1,3 @@
-"""JWST WASP-39 b Transmission-Spectrum Evidence Ladder."""
+"""Reproducible JWST WASP-39 b CO sub-band analysis."""
 
-__version__ = "0.1.0"
+__version__ = "2.0.0"

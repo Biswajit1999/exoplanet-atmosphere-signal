@@ -1,9 +1,9 @@
 project:
-  title: "JWST WASP-39 b Transmission-Spectrum Evidence Ladder"
+  title: "JWST WASP-39 b CO Sub-band Reproduction"
   repository: "exoplanet-atmosphere-signal"
   author: "Biswajit Jana"
-  curation_status: "BUILD_FIRST"
-  priority: 8.8
+  curation_status: "published-reproduction"
+  priority: 1.0
 
 execution:
   seed: 20260713
@@ -19,7 +19,7 @@ input:
 
 validation:
   minimum_sample_size: 30
-  bootstrap_resamples: 1000
+  bootstrap_resamples: 10000
   confidence_level: 0.95
 
 provenance:

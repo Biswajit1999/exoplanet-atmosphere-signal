@@ -4,7 +4,14 @@ import numpy as np
 import pytest
 
 from jwst_wasp39b_evidence_ladder.exceptions import InsufficientDataError
-from jwst_wasp39b_evidence_ladder.metrics import aic, bic, evidence_ladder, weighted_chi_square
+from jwst_wasp39b_evidence_ladder.metrics import (
+    aic,
+    bic,
+    evidence_ladder,
+    fixed_curve_diagnostic,
+    weighted_chi_square,
+    welch_sub_band_contrast,
+)
 
 
 def test_weighted_chi_square_zero_for_perfect_model():
@@ -52,3 +59,19 @@ def test_evidence_ladder_prefers_simple_on_null_data():
 def test_evidence_ladder_raises_on_empty_data():
     with pytest.raises(InsufficientDataError):
         evidence_ladder(np.array([]), np.array([]), np.array([]), np.array([]), 0, 1)
+
+
+def test_welch_contrast_uses_physical_direction_and_ppm():
+    result = welch_sub_band_contrast(np.array([0.0202, 0.0204, 0.0203]), np.array([0.0200, 0.0201, 0.0199]))
+    assert result.contrast_ppm == pytest.approx(300.0)
+    assert result.p_one_sided < 0.05
+
+
+def test_fixed_curve_diagnostic_reports_no_information_criteria():
+    result = fixed_curve_diagnostic(
+        np.array([1.0, 2.0]), np.array([0.1, 0.1]),
+        np.array([0.9, 1.9]), np.array([1.0, 2.0]),
+    )
+    assert result.delta_chi2 == pytest.approx(2.0)
+    assert not hasattr(result, "aic")
+    assert not hasattr(result, "bic")

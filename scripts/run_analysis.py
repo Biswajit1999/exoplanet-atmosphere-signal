@@ -1,5 +1,4 @@
-"""Run the evidence-ladder analysis: --demo (synthetic smoke test/injection
-gate) or real-data path (real WASP-39b spectrum via manifest + core.run_pipeline).
+"""Run the CO sub-band reproduction or an explicitly synthetic smoke test.
 
 Peak memory is measured with the stdlib `tracemalloc` (Python-level
 allocations) rather than a full process-RSS profiler such as psutil, which
@@ -17,7 +16,7 @@ from pathlib import Path
 
 from jwst_wasp39b_evidence_ladder import __version__ as PACKAGE_VERSION
 from jwst_wasp39b_evidence_ladder.config import load_config
-from jwst_wasp39b_evidence_ladder.core import N_PARAMS_COMPLEX, N_PARAMS_SIMPLE, run_pipeline
+from jwst_wasp39b_evidence_ladder.core import run_pipeline
 from jwst_wasp39b_evidence_ladder.exceptions import InsufficientDataError
 from jwst_wasp39b_evidence_ladder.logging_utils import get_logger
 from jwst_wasp39b_evidence_ladder.metrics import evidence_ladder
@@ -70,12 +69,12 @@ def run_demo(config_path: Path, out_path: Path) -> None:
     ladder_injected = evidence_ladder(
         data=injected.transit_depth, uncertainty=injected.transit_depth_err,
         model_simple=flat_injected, model_complex=injected.transit_depth,
-        n_params_simple=N_PARAMS_SIMPLE, n_params_complex=N_PARAMS_COMPLEX,
+        n_params_simple=0, n_params_complex=1,
     )
     ladder_null = evidence_ladder(
         data=null.transit_depth, uncertainty=null.transit_depth_err,
         model_simple=flat_null, model_complex=flat_null,
-        n_params_simple=N_PARAMS_SIMPLE, n_params_complex=N_PARAMS_COMPLEX,
+        n_params_simple=0, n_params_complex=1,
     )
 
     elapsed = time.perf_counter() - start
@@ -121,25 +120,25 @@ def run_real(config_path: Path) -> None:
     metrics: list[Metric] = []
     warnings = list(result.warnings)
     if result.target is not None:
-        ladder = result.target.ladder
-        ci_lo, ci_hi = result.target.feature_amplitude_bootstrap_ci
-        estimate = (ci_lo + ci_hi) / 2.0 if ci_lo == ci_lo else float("nan")
+        target = result.target
+        contrast = target.contrast
+        ci_lo, ci_hi = target.bootstrap_ci_ppm
         metrics.extend([
-            Metric(name="chi2_no_feature_model", estimate=ladder.chi2_simple, units="chi-square", sample_size=len(manifest_rows)),
-            Metric(name="chi2_full_model", estimate=ladder.chi2_complex, units="chi-square", sample_size=len(manifest_rows)),
-            Metric(name="delta_aic", estimate=ladder.delta_aic, units="AIC units", sample_size=len(manifest_rows)),
-            Metric(name="delta_bic", estimate=ladder.delta_bic, units="BIC units", sample_size=len(manifest_rows)),
             Metric(
-                name="feature_amplitude_mean_residual_in_co_band",
-                estimate=estimate, units="transit depth (Rp/Rs)^2", sample_size=len(manifest_rows),
+                name="co_sub_band_mean_contrast", estimate=contrast.contrast_ppm,
+                units="ppm transit depth", sample_size=contrast.n_in + contrast.n_out,
                 uncertainty_low=ci_lo, uncertainty_high=ci_hi,
             ),
+            Metric(name="welch_t_statistic", estimate=contrast.t_statistic, units="dimensionless", sample_size=contrast.n_in + contrast.n_out),
+            Metric(name="welch_p_one_sided", estimate=contrast.p_one_sided, units="probability", sample_size=contrast.n_in + contrast.n_out),
+            Metric(name="permutation_p_one_sided", estimate=target.permutation_p_one_sided, units="probability", sample_size=contrast.n_in + contrast.n_out),
+            Metric(name="fixed_curve_delta_chi2", estimate=target.fixed_curves.delta_chi2, units="chi-square", sample_size=target.fixed_curves.n_points),
+            Metric(name="fixed_curve_chi2_per_point_full", estimate=target.fixed_curves.chi2_per_point_full, units="chi-square per point", sample_size=target.fixed_curves.n_points),
         ])
-        n_complex_preferred = sum(1 for p in result.target.segment_preferences if p == "complex")
         warnings.append(
-            f"preferred_model (full spectrum): {ladder.preferred_model}; "
-            f"segment preferences: {result.target.segment_preferences} "
-            f"({n_complex_preferred}/{len(result.target.segment_preferences)} segments favour the CO model)"
+            f"wavelength-zone contrasts (ppm): {target.zone_contrasts_ppm}; "
+            f"leave-one-contiguous-run range: {target.leave_one_run_range_ppm[0]:.1f} to "
+            f"{target.leave_one_run_range_ppm[1]:.1f} ppm"
         )
     else:
         warnings.append("no target result produced; see warnings above for load failure detail")
@@ -147,11 +146,12 @@ def run_real(config_path: Path) -> None:
     results_dir = Path(config.execution.output_directory)
     out_path = results_dir / "summary.json"
     write_summary(
-        out_path, project="exoplanet-atmosphere-signal", data_kind="real WASP-39b JWST NIRSpec spectrum",
+        out_path, project="exoplanet-atmosphere-signal", data_kind="Grant et al. 2023 JWST/NIRSpec G395H release",
         metrics=metrics, provenance=_provenance(config_path), warnings=warnings,
     )
     (results_dir / "warnings.json").write_text(json.dumps(warnings, indent=2), encoding="utf-8")
-    _write_benchmark(results_dir / "benchmarks.json", "real_data", elapsed, peak / (1024 * 1024), len(manifest_rows))
+    sample_size = result.target.contrast.n_in + result.target.contrast.n_out if result.target else 0
+    _write_benchmark(results_dir / "benchmarks.json", "real_data", elapsed, peak / (1024 * 1024), sample_size)
     print(f"Real-data summary written to {out_path}")
 
 

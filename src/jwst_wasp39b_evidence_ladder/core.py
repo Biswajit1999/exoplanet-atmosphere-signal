@@ -1,7 +1,4 @@
-"""Pipeline orchestration: real-data evidence-ladder comparison, bootstrap
-feature-amplitude stability, leave-one-segment-out sensitivity, plus the
-retained starter smoke-test functions.
-"""
+"""Pipeline orchestration for the released WASP-39 b CO sub-band experiment."""
 from __future__ import annotations
 
 from dataclasses import dataclass, field
@@ -10,14 +7,18 @@ from pathlib import Path
 import numpy as np
 
 from jwst_wasp39b_evidence_ladder.config import AnalysisConfig
-from jwst_wasp39b_evidence_ladder.exceptions import (
-    ConvergenceError,
-    DataSchemaError,
-    InsufficientDataError,
+from jwst_wasp39b_evidence_ladder.exceptions import DataSchemaError, InsufficientDataError
+from jwst_wasp39b_evidence_ladder.io import (
+    COSubBandSamples,
+    load_co_sub_band_samples,
+    load_spectrum,
 )
-from jwst_wasp39b_evidence_ladder.io import WASP39bSpectrum, load_spectrum
-from jwst_wasp39b_evidence_ladder.metrics import EvidenceLadderResult, evidence_ladder
-from jwst_wasp39b_evidence_ladder.uncertainty import bootstrap_statistic
+from jwst_wasp39b_evidence_ladder.metrics import (
+    FixedCurveDiagnostic,
+    WelchContrast,
+    fixed_curve_diagnostic,
+    welch_sub_band_contrast,
+)
 
 
 @dataclass(frozen=True)
@@ -53,24 +54,14 @@ def demo_series(seed: int = 20260713, size: int = 128) -> np.ndarray:
     return rng.normal(loc=0.0, scale=1.0, size=size)
 
 
-# The real published models are physically-motivated atmospheric retrieval
-# fits, not simple analytic functions with an exactly-known free-parameter
-# count from the netCDF file alone. Per docs/RESEARCH_BLUEPRINT.md's
-# "simple nested-model" framing, this project treats the no-CO -> full-model
-# step as adding exactly 1 effective parameter (the CO abundance/opacity
-# term) -- a documented, defensible simplification, not a fabricated exact
-# count from the original retrieval. See report.tex Limitations.
-N_PARAMS_SIMPLE = 0
-N_PARAMS_COMPLEX = 1
-
-N_SEGMENTS = 3
-
-
 @dataclass
 class TargetResult:
-    ladder: EvidenceLadderResult
-    feature_amplitude_bootstrap_ci: tuple[float, float]
-    segment_preferences: list[str] = field(default_factory=list)
+    contrast: WelchContrast
+    bootstrap_ci_ppm: tuple[float, float]
+    permutation_p_one_sided: float
+    fixed_curves: FixedCurveDiagnostic
+    zone_contrasts_ppm: dict[str, float] = field(default_factory=dict)
+    leave_one_run_range_ppm: tuple[float, float] = (float("nan"), float("nan"))
 
 
 @dataclass
@@ -79,70 +70,103 @@ class PipelineResult:
     warnings: list[str] = field(default_factory=list)
 
 
-def _feature_amplitude_bootstrap(spectrum: WASP39bSpectrum, seed: int = 20260713) -> tuple[float, float]:
-    """Bootstrap CI on the mean (data - no_feature_model) within the CO
-    band (defined as the wavelength range where the real published
-    CO-only model component exceeds 10% of its own peak)."""
-    peak = np.max(np.abs(spectrum.model_feature_only))
-    if peak <= 0.0:
-        raise InsufficientDataError("_feature_amplitude_bootstrap: feature-only model has zero peak amplitude")
-    threshold = 0.1 * peak
-    band_mask = np.abs(spectrum.model_feature_only) >= threshold
-    if band_mask.sum() < 2:
-        raise InsufficientDataError("_feature_amplitude_bootstrap: fewer than 2 points in the CO band")
-    residual_in_band = (spectrum.transit_depth - spectrum.model_no_feature)[band_mask]
-    result = bootstrap_statistic(residual_in_band, statistic=np.mean, seed=seed)
-    return (result.ci_low, result.ci_high)
+def bootstrap_contrast(
+    samples: COSubBandSamples, n_resamples: int = 10_000, seed: int = 20260713,
+) -> tuple[float, float]:
+    """Percentile interval from independent resampling within the two bands."""
+    rng = np.random.default_rng(seed)
+    inside, outside = samples.depth_in * 1e6, samples.depth_out * 1e6
+    draws = np.empty(n_resamples)
+    for index in range(n_resamples):
+        draws[index] = (
+            rng.choice(inside, inside.size, replace=True).mean()
+            - rng.choice(outside, outside.size, replace=True).mean()
+        )
+    return float(np.quantile(draws, 0.025)), float(np.quantile(draws, 0.975))
+
+
+def permutation_p_value(
+    samples: COSubBandSamples, n_permutations: int = 20_000, seed: int = 20260713,
+) -> float:
+    """Exploratory one-sided randomisation check under exchangeable labels."""
+    rng = np.random.default_rng(seed)
+    inside, outside = samples.depth_in * 1e6, samples.depth_out * 1e6
+    observed = inside.mean() - outside.mean()
+    pooled = np.concatenate((inside, outside))
+    exceedances = 0
+    for _ in range(n_permutations):
+        shuffled = rng.permutation(pooled)
+        exceedances += int(shuffled[: inside.size].mean() - shuffled[inside.size :].mean() >= observed)
+    return (exceedances + 1) / (n_permutations + 1)
+
+
+def _leave_one_run_range(samples: COSubBandSamples) -> tuple[float, float]:
+    """Delete contiguous wavelength runs to expose local spectral leverage."""
+    all_wavelengths = np.sort(np.concatenate((samples.wavelength_in_um, samples.wavelength_out_um)))
+    native_spacing = float(np.median(np.diff(all_wavelengths)))
+
+    def runs(wavelength: np.ndarray) -> list[np.ndarray]:
+        return list(np.split(np.arange(wavelength.size), np.where(np.diff(wavelength) > 3 * native_spacing)[0] + 1))
+
+    values: list[float] = []
+    for group, other, wavelength in (
+        (samples.depth_in, samples.depth_out, samples.wavelength_in_um),
+        (samples.depth_out, samples.depth_in, samples.wavelength_out_um),
+    ):
+        for run in runs(wavelength):
+            retained = np.delete(group, run)
+            if group is samples.depth_in:
+                values.append(float((retained.mean() - other.mean()) * 1e6))
+            else:
+                values.append(float((other.mean() - retained.mean()) * 1e6))
+    return min(values), max(values)
 
 
 def run_pipeline(manifest_rows: list[dict[str, str]], raw_dir: Path, config: AnalysisConfig) -> PipelineResult:
-    """Run the evidence-ladder pipeline over the real WASP-39b spectrum
-    listed in the manifest.
-
-    Raises `InsufficientDataError` immediately if the manifest is empty.
-    Per-step failures (segment too small, bootstrap failure) are caught and
-    converted to warnings rather than aborting the whole run.
-    """
+    """Reproduce the paper's estimand and add transparent robustness checks."""
     if not manifest_rows:
         raise InsufficientDataError("run_pipeline: manifest_rows is empty")
 
     warnings: list[str] = []
-    product_id = manifest_rows[0].get("product_id", "UNKNOWN")
-    nc_path = Path(raw_dir) / f"{product_id}.nc"
-
     try:
-        spectrum = load_spectrum(nc_path)
+        spectrum_id = next(row["product_id"] for row in manifest_rows if "transmission_spectrum" in row["product_id"])
+        bands_id = next(row["product_id"] for row in manifest_rows if "co_sub_band" in row["product_id"])
+        spectrum = load_spectrum(Path(raw_dir) / f"{spectrum_id}.nc")
+        samples = load_co_sub_band_samples(Path(raw_dir) / f"{bands_id}.nc")
     except DataSchemaError as exc:
-        return PipelineResult(target=None, warnings=[f"{product_id}: skipped (load failure): {exc}"])
+        return PipelineResult(target=None, warnings=[f"load failure: {exc}"])
+    except StopIteration:
+        return PipelineResult(target=None, warnings=["manifest must include spectrum and CO sub-band products"])
 
-    ladder = evidence_ladder(
-        data=spectrum.transit_depth, uncertainty=spectrum.transit_depth_err,
-        model_simple=spectrum.model_no_feature, model_complex=spectrum.model_full,
-        n_params_simple=N_PARAMS_SIMPLE, n_params_complex=N_PARAMS_COMPLEX,
+    contrast = welch_sub_band_contrast(samples.depth_in, samples.depth_out)
+    fixed = fixed_curve_diagnostic(
+        spectrum.transit_depth, spectrum.transit_depth_err,
+        spectrum.model_no_feature, spectrum.model_full,
     )
-
-    try:
-        amplitude_ci = _feature_amplitude_bootstrap(spectrum)
-    except InsufficientDataError as exc:
-        warnings.append(f"{product_id}: feature-amplitude bootstrap skipped: {exc}")
-        amplitude_ci = (float("nan"), float("nan"))
-
-    segment_edges = np.linspace(spectrum.wavelength_um.min(), spectrum.wavelength_um.max(), N_SEGMENTS + 1)
-    segment_preferences: list[str] = []
-    for i in range(N_SEGMENTS):
-        seg_mask = (spectrum.wavelength_um >= segment_edges[i]) & (spectrum.wavelength_um <= segment_edges[i + 1])
-        if seg_mask.sum() < 3:
-            warnings.append(f"{product_id}: segment {i} has fewer than 3 points, skipped in leave-one-out")
-            continue
-        try:
-            seg_ladder = evidence_ladder(
-                data=spectrum.transit_depth[seg_mask], uncertainty=spectrum.transit_depth_err[seg_mask],
-                model_simple=spectrum.model_no_feature[seg_mask], model_complex=spectrum.model_full[seg_mask],
-                n_params_simple=N_PARAMS_SIMPLE, n_params_complex=N_PARAMS_COMPLEX,
+    zones: dict[str, float] = {}
+    for low, high in ((4.4, 4.7), (4.7, 5.01)):
+        in_mask = (samples.wavelength_in_um >= low) & (samples.wavelength_in_um < high)
+        out_mask = (samples.wavelength_out_um >= low) & (samples.wavelength_out_um < high)
+        if in_mask.sum() >= 2 and out_mask.sum() >= 2:
+            zones[f"{low:.1f}-{min(high, 5.0):.1f} um"] = float(
+                (samples.depth_in[in_mask].mean() - samples.depth_out[out_mask].mean()) * 1e6
             )
-            segment_preferences.append(seg_ladder.preferred_model)
-        except (InsufficientDataError, ConvergenceError, DataSchemaError) as exc:
-            warnings.append(f"{product_id}: segment {i} evidence ladder skipped: {exc}")
 
-    target = TargetResult(ladder=ladder, feature_amplitude_bootstrap_ci=amplitude_ci, segment_preferences=segment_preferences)
+    if contrast.n_out != 148:
+        warnings.append(
+            f"Zenodo sub-band file contains {contrast.n_out} out-of-band samples; "
+            "the paper text reports 148. Calculations use the archived arrays without alteration."
+        )
+    warnings.append(
+        "Fixed-curve chi-square values are descriptive only: neither atmospheric model was refit here, "
+        "so AIC, BIC, Bayes factors, and abundance constraints are not identified by this workflow."
+    )
+    target = TargetResult(
+        contrast=contrast,
+        bootstrap_ci_ppm=bootstrap_contrast(samples, config.validation.bootstrap_resamples, config.execution.seed),
+        permutation_p_one_sided=permutation_p_value(samples, seed=config.execution.seed),
+        fixed_curves=fixed,
+        zone_contrasts_ppm=zones,
+        leave_one_run_range_ppm=_leave_one_run_range(samples),
+    )
     return PipelineResult(target=target, warnings=warnings)

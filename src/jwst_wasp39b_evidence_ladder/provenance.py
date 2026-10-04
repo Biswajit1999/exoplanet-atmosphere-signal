@@ -37,11 +37,12 @@ def get_git_commit(repo_root: str | Path) -> str:
             cwd=str(repo_root),
             capture_output=True,
             text=True,
+            check=False,
             timeout=5,
         )
         if result.returncode == 0 and result.stdout.strip():
             return result.stdout.strip()
-    except Exception:  # noqa: BLE001
+    except (OSError, subprocess.SubprocessError):
         pass
     return "LOCAL_UNCOMMITTED"
 

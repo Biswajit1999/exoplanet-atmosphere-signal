@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-
 import numpy as np
 import pytest
 
@@ -11,7 +10,12 @@ except ImportError:
     HAVE_NETCDF4 = False
 
 from jwst_wasp39b_evidence_ladder.exceptions import DataSchemaError
-from jwst_wasp39b_evidence_ladder.io import REQUIRED_VARIABLES, load_spectrum
+from jwst_wasp39b_evidence_ladder.io import (
+    REQUIRED_VARIABLES,
+    SUB_BAND_VARIABLES,
+    load_co_sub_band_samples,
+    load_spectrum,
+)
 
 
 def test_load_spectrum_raises_on_missing_file(tmp_path):
@@ -46,3 +50,21 @@ def test_load_spectrum_sorts_by_wavelength_and_reads_all_variables(tmp_path):
     spectrum = load_spectrum(path)
     assert np.all(np.diff(spectrum.wavelength_um) > 0)
     assert spectrum.wavelength_um.size == n
+
+
+@pytest.mark.skipif(not HAVE_NETCDF4, reason="netCDF4 not installed")
+def test_load_co_sub_bands_sorts_each_group(tmp_path):
+    path = tmp_path / "bands.nc"
+    with netCDF4.Dataset(path, "w") as ds:
+        ds.createDimension("inside", 3)
+        ds.createDimension("outside", 4)
+        for name in SUB_BAND_VARIABLES:
+            dim = "inside" if "_in_" in name else "outside"
+            var = ds.createVariable(name, "f8", (dim,))
+            if "wavelength" in name:
+                var[:] = [4.8, 4.4, 4.6] if dim == "inside" else [4.9, 4.3, 4.7, 4.5]
+            else:
+                var[:] = 0.02
+    samples = load_co_sub_band_samples(path)
+    assert np.all(np.diff(samples.wavelength_in_um) > 0)
+    assert np.all(np.diff(samples.wavelength_out_um) > 0)

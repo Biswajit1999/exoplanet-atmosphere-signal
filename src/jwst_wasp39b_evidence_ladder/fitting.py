@@ -9,7 +9,7 @@ import numpy as np
 from scipy.optimize import curve_fit
 
 from jwst_wasp39b_evidence_ladder.exceptions import ConvergenceError, InsufficientDataError
-from jwst_wasp39b_evidence_ladder.models import flat_plus_gaussian_model, flat_model
+from jwst_wasp39b_evidence_ladder.models import flat_model, flat_plus_gaussian_model
 from jwst_wasp39b_evidence_ladder.uncertainty import check_fit_convergence
 
 

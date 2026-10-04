@@ -1,16 +1,83 @@
-"""Weighted chi-square, AIC, BIC and nested-model preference decision.
-
-The "evidence ladder" central to this project's scientific question: for a
-pair of nested models (fewer-parameter vs. more-parameter), report chi2,
-AIC, BIC for each and which model is statistically preferred.
-"""
+"""Statistical estimands used by the reproducible CO sub-band analysis."""
 from __future__ import annotations
 
 from dataclasses import dataclass
 
 import numpy as np
+from scipy import stats
 
 from jwst_wasp39b_evidence_ladder.exceptions import InsufficientDataError
+
+
+@dataclass(frozen=True)
+class WelchContrast:
+    n_in: int
+    n_out: int
+    mean_in_ppm: float
+    mean_out_ppm: float
+    contrast_ppm: float
+    standard_error_ppm: float
+    t_statistic: float
+    degrees_of_freedom: float
+    p_one_sided: float
+    ci95_low_ppm: float
+    ci95_high_ppm: float
+
+
+def welch_sub_band_contrast(depth_in: np.ndarray, depth_out: np.ndarray) -> WelchContrast:
+    """Difference of means and one-sided Welch test, expressed in ppm.
+
+    The alternative is the preregistered physical direction used in Grant et al.:
+    the CO-selected sub-bands have greater transit depth than the comparison bands.
+    """
+    inside = np.asarray(depth_in, dtype=float)
+    outside = np.asarray(depth_out, dtype=float)
+    if inside.size < 2 or outside.size < 2:
+        raise InsufficientDataError("Welch contrast requires at least two samples per group")
+    if not np.all(np.isfinite(inside)) or not np.all(np.isfinite(outside)):
+        raise InsufficientDataError("Welch contrast received non-finite data")
+    inside_ppm, outside_ppm = inside * 1e6, outside * 1e6
+    vi, vo = np.var(inside_ppm, ddof=1), np.var(outside_ppm, ddof=1)
+    ni, no = inside_ppm.size, outside_ppm.size
+    se2_i, se2_o = vi / ni, vo / no
+    se = float(np.sqrt(se2_i + se2_o))
+    dof = float((se2_i + se2_o) ** 2 / (se2_i**2 / (ni - 1) + se2_o**2 / (no - 1)))
+    contrast = float(np.mean(inside_ppm) - np.mean(outside_ppm))
+    t_stat = contrast / se
+    critical = float(stats.t.ppf(0.975, dof))
+    return WelchContrast(
+        n_in=int(ni), n_out=int(no), mean_in_ppm=float(np.mean(inside_ppm)),
+        mean_out_ppm=float(np.mean(outside_ppm)), contrast_ppm=contrast,
+        standard_error_ppm=se, t_statistic=t_stat, degrees_of_freedom=dof,
+        p_one_sided=float(stats.t.sf(t_stat, dof)),
+        ci95_low_ppm=contrast - critical * se, ci95_high_ppm=contrast + critical * se,
+    )
+
+
+@dataclass(frozen=True)
+class FixedCurveDiagnostic:
+    n_points: int
+    chi2_no_co: float
+    chi2_full: float
+    delta_chi2: float
+    chi2_per_point_no_co: float
+    chi2_per_point_full: float
+
+
+def fixed_curve_diagnostic(
+    data: np.ndarray, uncertainty: np.ndarray, model_no_co: np.ndarray, model_full: np.ndarray,
+) -> FixedCurveDiagnostic:
+    """Goodness-of-fit comparison for two archived curves that were not refit here.
+
+    No AIC/BIC is calculated: the release does not encode the fitted parameter
+    counts or likelihood construction needed for a valid information criterion.
+    """
+    n = int(np.asarray(data).size)
+    if n == 0:
+        raise InsufficientDataError("fixed_curve_diagnostic: empty data array")
+    no_co = weighted_chi_square(data, model_no_co, uncertainty)
+    full = weighted_chi_square(data, model_full, uncertainty)
+    return FixedCurveDiagnostic(n, no_co, full, no_co - full, no_co / n, full / n)
 
 
 def weighted_chi_square(data: np.ndarray, model: np.ndarray, uncertainty: np.ndarray) -> float:

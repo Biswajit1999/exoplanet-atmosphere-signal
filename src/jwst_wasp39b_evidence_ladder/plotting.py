@@ -4,9 +4,8 @@ from pathlib import Path
 
 import matplotlib.pyplot as plt
 import numpy as np
-import scienceplots  # noqa: F401 - importing registers the SciencePlots styles
 
-plt.style.use(["science", "no-latex"])
+plt.style.use("seaborn-v0_8-whitegrid")
 
 
 def plot_demo(values: np.ndarray, output: str | Path) -> Path:

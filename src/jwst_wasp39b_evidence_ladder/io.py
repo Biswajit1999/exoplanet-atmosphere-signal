@@ -1,11 +1,4 @@
-"""Loading the real WASP-39b transmission-spectrum netCDF product
-(Grant et al. 2023, arXiv:2304.11994; Zenodo DOI 10.5281/zenodo.7866690).
-
-The file carries real observed transit depth + uncertainty, plus the
-paper's own real published best-fit models (full model including CO, and
-a nested model with CO removed) -- used directly as the "evidence ladder"
-comparison, not re-fit or invented.
-"""
+"""Load the public WASP-39 b products released with Grant et al. (2023)."""
 from __future__ import annotations
 
 from dataclasses import dataclass
@@ -33,6 +26,24 @@ class WASP39bSpectrum:
     model_full: np.ndarray
     model_no_feature: np.ndarray
     model_feature_only: np.ndarray
+
+
+@dataclass(frozen=True)
+class COSubBandSamples:
+    """Observed transit depths selected by the authors' CO sub-band mask."""
+
+    wavelength_in_um: np.ndarray
+    depth_in: np.ndarray
+    wavelength_out_um: np.ndarray
+    depth_out: np.ndarray
+
+
+SUB_BAND_VARIABLES = (
+    "wavelength_in_co_sub_bands",
+    "transit_depths_in_co_sub_bands",
+    "wavelength_out_of_co_sub_bands",
+    "transit_depths_out_of_co_sub_bands",
+)
 
 
 def load_spectrum(path: str | Path) -> WASP39bSpectrum:
@@ -75,3 +86,33 @@ def load_spectrum(path: str | Path) -> WASP39bSpectrum:
         model_full=model_full[order], model_no_feature=model_no_feature[order],
         model_feature_only=model_feature_only[order],
     )
+
+
+def load_co_sub_band_samples(path: str | Path) -> COSubBandSamples:
+    """Load the exact in/out samples used for the paper's Welch test."""
+    nc_path = Path(path)
+    if not nc_path.is_file():
+        raise DataSchemaError(f"CO sub-band file not found: {nc_path}")
+    try:
+        import netCDF4
+    except ImportError as exc:  # pragma: no cover
+        raise DataSchemaError("netCDF4 is not installed in this environment") from exc
+
+    try:
+        with netCDF4.Dataset(nc_path, "r") as ds:
+            missing = [name for name in SUB_BAND_VARIABLES if name not in ds.variables]
+            if missing:
+                raise DataSchemaError(f"{nc_path}: missing required variables: {missing}")
+            wi = np.asarray(ds.variables[SUB_BAND_VARIABLES[0]][:], dtype=float)
+            di = np.asarray(ds.variables[SUB_BAND_VARIABLES[1]][:], dtype=float)
+            wo = np.asarray(ds.variables[SUB_BAND_VARIABLES[2]][:], dtype=float)
+            do = np.asarray(ds.variables[SUB_BAND_VARIABLES[3]][:], dtype=float)
+    except OSError as exc:
+        raise DataSchemaError(f"{nc_path}: could not be opened as netCDF: {exc}") from exc
+
+    if wi.size < 2 or wo.size < 2 or wi.size != di.size or wo.size != do.size:
+        raise DataSchemaError(f"{nc_path}: invalid CO sub-band array lengths")
+    if not all(np.all(np.isfinite(x)) for x in (wi, di, wo, do)):
+        raise DataSchemaError(f"{nc_path}: CO sub-band arrays contain non-finite values")
+    oi, oo = np.argsort(wi), np.argsort(wo)
+    return COSubBandSamples(wi[oi], di[oi], wo[oo], do[oo])
