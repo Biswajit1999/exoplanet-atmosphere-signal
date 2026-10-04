@@ -1,19 +1,32 @@
-project_title: "JWST WASP-39 b Transmission-Spectrum Evidence Ladder"
-repository: "jwst-wasp39b-evidence-ladder"
+project_title: "JWST WASP-39 b CO sub-band reproduction"
+repository: "exoplanet-atmosphere-signal"
 author: "Biswajit Jana"
-data_mode: "real public JWST spectrum products"
-created_utc: "2026-07-13T09:46:17.516715+00:00"
+data_mode: "real public JWST/NIRSpec G395H products"
 
-source_products: []
-# Each entry must contain:
-# product_id, source, source_url, retrieved_utc, sha256,
-# file_size_bytes, licence_or_terms, selection_reason
+source:
+  citation: "Grant et al. 2023, ApJL 956, L32"
+  article_doi: "10.3847/2041-8213/acfc3b"
+  archive_doi: "10.5281/zenodo.7866690"
+  record_url: "https://zenodo.org/records/7866690"
+  files_committed: 3
+  manifest: "data/manifest.csv"
 
 derivation:
-  configuration_file: config/analysis.yml
-  configuration_sha256: HASH_RECORDED_BY_VALIDATION_LAYER
-  software_commit: LOCAL_UNCOMMITTED
-  scripts: []
+  primary_estimand: "mean transit-depth contrast: author-selected CO in-band minus out-of-band samples"
+  primary_test: "one-sided Welch unequal-variance t-test"
+  uncertainty:
+    - "Welch standard error and t-distribution confidence interval"
+    - "independent-within-group nonparametric bootstrap"
+  robustness:
+    - "label permutation (exploratory; exchangeability assumption stated)"
+    - "two wavelength-zone contrasts"
+    - "leave-one-contiguous-run influence range"
+  descriptive_only: "chi-square difference between archived fixed curves; no refitting, AIC, BIC, Bayes factor, or abundance inference"
 
-assumptions: []
-warnings: []
+known_discrepancies:
+  - "The archived sub-band file has 111 in-band and 145 out-of-band values; the article text reports 111 and 148. The pipeline uses the released arrays unchanged."
+
+claim_boundary:
+  - "This is an independent computational reproduction from the authors' released derived products, not an independent reduction from detector ramps."
+  - "The selected bands are model-informed; the test is not a blind search over arbitrary molecules."
+  - "Spectral pixels may retain correlation, so the nominal Welch p-value should not be read as a universal detection probability."
