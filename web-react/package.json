@@ -1,7 +1,7 @@
 {
   "name": "exoplanet-atmosphere-signal-web",
   "private": true,
-  "version": "0.1.0",
+  "version": "2.0.0",
   "author": "Biswajit Jana",
   "type": "module",
   "scripts": {
@@ -11,19 +11,14 @@
     "lint": "eslint ."
   },
   "dependencies": {
-    "@react-three/fiber": "8.17.10",
-    "@vitejs/plugin-react": "4.3.1",
-    "vite": "5.4.8",
+    "@vitejs/plugin-react": "4.7.0",
+    "vite": "5.4.21",
     "react": "18.3.1",
     "react-dom": "18.3.1",
-    "lucide-react": "0.468.0",
-    "three": "0.169.0"
+    "lucide-react": "0.468.0"
   },
   "devDependencies": {
-    "tailwindcss": "3.4.13",
-    "postcss": "8.4.47",
-    "autoprefixer": "10.4.20",
-    "eslint": "9.11.1",
+    "eslint": "9.39.5",
     "eslint-plugin-react-hooks": "5.1.0",
     "@eslint/js": "9.11.1",
     "globals": "15.9.0",

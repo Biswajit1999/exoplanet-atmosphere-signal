@@ -1,0 +1,10 @@
+{
+  "figure": "fig02_sub_band_samples",
+  "caption": "Exact released in/out samples; dashed lines mark group means.",
+  "data_kind": "archived JWST/NIRSpec G395H products",
+  "sample_size": 256,
+  "git_commit": "35d81d6ddafe66bc41982a05d3d83ad6a5100cfb",
+  "config_sha256": "944fdfa200de74c15c33c5352f6340f158aaa0078b25ec33d38ded8bc518db7d",
+  "package_version": "2.0.0",
+  "python_version": "3.12.14"
+}

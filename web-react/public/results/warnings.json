@@ -1,3 +1,5 @@
 [
-  "preferred_model (full spectrum): complex; segment preferences: ['simple', 'complex', 'complex'] (2/3 segments favour the CO model)"
+  "Zenodo sub-band file contains 145 out-of-band samples; the paper text reports 148. Calculations use the archived arrays without alteration.",
+  "Fixed-curve chi-square values are descriptive only: neither atmospheric model was refit here, so AIC, BIC, Bayes factors, and abundance constraints are not identified by this workflow.",
+  "wavelength-zone contrasts (ppm): {'4.4-4.7 um': 363.2696179353863, '4.7-5.0 um': 196.45822790330737}; leave-one-contiguous-run range: 244.7 to 280.3 ppm"
 ]

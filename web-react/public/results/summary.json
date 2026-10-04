@@ -1,56 +1,66 @@
 {
   "project": "exoplanet-atmosphere-signal",
-  "data_kind": "real WASP-39b JWST NIRSpec spectrum",
+  "data_kind": "Grant et al. 2023 JWST/NIRSpec G395H release",
   "metrics": [
     {
-      "name": "chi2_no_feature_model",
-      "estimate": 1230.090839727976,
+      "name": "co_sub_band_mean_contrast",
+      "estimate": 263.65953176943367,
+      "uncertainty_low": 130.37991138227488,
+      "uncertainty_high": 394.0337223111375,
+      "units": "ppm transit depth",
+      "sample_size": 256
+    },
+    {
+      "name": "welch_t_statistic",
+      "estimate": 3.895428668371266,
+      "uncertainty_low": null,
+      "uncertainty_high": null,
+      "units": "dimensionless",
+      "sample_size": 256
+    },
+    {
+      "name": "welch_p_one_sided",
+      "estimate": 6.295862153003851e-05,
+      "uncertainty_low": null,
+      "uncertainty_high": null,
+      "units": "probability",
+      "sample_size": 256
+    },
+    {
+      "name": "permutation_p_one_sided",
+      "estimate": 9.99950002499875e-05,
+      "uncertainty_low": null,
+      "uncertainty_high": null,
+      "units": "probability",
+      "sample_size": 256
+    },
+    {
+      "name": "fixed_curve_delta_chi2",
+      "estimate": 75.65391509487972,
       "uncertainty_low": null,
       "uncertainty_high": null,
       "units": "chi-square",
-      "sample_size": 1
+      "sample_size": 1008
     },
     {
-      "name": "chi2_full_model",
-      "estimate": 1154.4369246330962,
+      "name": "fixed_curve_chi2_per_point_full",
+      "estimate": 1.1452747268185477,
       "uncertainty_low": null,
       "uncertainty_high": null,
-      "units": "chi-square",
-      "sample_size": 1
-    },
-    {
-      "name": "delta_aic",
-      "estimate": 73.65391509487972,
-      "uncertainty_low": null,
-      "uncertainty_high": null,
-      "units": "AIC units",
-      "sample_size": 1
-    },
-    {
-      "name": "delta_bic",
-      "estimate": 68.73819164624842,
-      "uncertainty_low": null,
-      "uncertainty_high": null,
-      "units": "BIC units",
-      "sample_size": 1
-    },
-    {
-      "name": "feature_amplitude_mean_residual_in_co_band",
-      "estimate": 0.0001936254564932402,
-      "uncertainty_low": 0.00013530898148380092,
-      "uncertainty_high": 0.0002519419315026795,
-      "units": "transit depth (Rp/Rs)^2",
-      "sample_size": 1
+      "units": "chi-square per point",
+      "sample_size": 1008
     }
   ],
   "provenance": {
-    "git_commit": "LOCAL_UNCOMMITTED",
-    "config_sha256": "9980c1f60ff8d0c1325a767dce47d27d067e56653050f84848cdebc29688f41f",
-    "package_version": "0.1.0",
-    "python_version": "3.9.19",
-    "platform": "Windows-10-10.0.26200-SP0"
+    "git_commit": "35d81d6ddafe66bc41982a05d3d83ad6a5100cfb",
+    "config_sha256": "944fdfa200de74c15c33c5352f6340f158aaa0078b25ec33d38ded8bc518db7d",
+    "package_version": "2.0.0",
+    "python_version": "3.12.14",
+    "platform": "Windows-11-10.0.26200-SP0"
   },
   "warnings": [
-    "preferred_model (full spectrum): complex; segment preferences: ['simple', 'complex', 'complex'] (2/3 segments favour the CO model)"
+    "Zenodo sub-band file contains 145 out-of-band samples; the paper text reports 148. Calculations use the archived arrays without alteration.",
+    "Fixed-curve chi-square values are descriptive only: neither atmospheric model was refit here, so AIC, BIC, Bayes factors, and abundance constraints are not identified by this workflow.",
+    "wavelength-zone contrasts (ppm): {'4.4-4.7 um': 363.2696179353863, '4.7-5.0 um': 196.45822790330737}; leave-one-contiguous-run range: 244.7 to 280.3 ppm"
   ]
 }
