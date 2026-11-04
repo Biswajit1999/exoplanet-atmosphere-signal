@@ -1,0 +1,20 @@
+name: Synthetic spectral robustness
+on:
+  push:
+    paths:
+      - 'research/**'
+      - '.github/workflows/spectral-robustness.yml'
+  pull_request:
+    paths:
+      - 'research/**'
+      - '.github/workflows/spectral-robustness.yml'
+jobs:
+  numerical:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: python -m pip install numpy pytest
+      - run: PYTHONPATH=research python -m pytest -q research/test_robustness.py
