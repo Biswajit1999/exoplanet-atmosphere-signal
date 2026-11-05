@@ -1,7 +1,16 @@
 import unittest
 import numpy as np
-from research.spectral_covariance_audit import (
-    ar1_covariance, template_gls, rho_sensitivity, injection_coverage)
+import importlib.util
+from pathlib import Path
+
+_spec = importlib.util.spec_from_file_location(
+    "spectral_covariance_audit", Path(__file__).resolve().parents[1] / "research" / "spectral_covariance_audit.py")
+_module = importlib.util.module_from_spec(_spec)
+_spec.loader.exec_module(_module)
+ar1_covariance = _module.ar1_covariance
+template_gls = _module.template_gls
+rho_sensitivity = _module.rho_sensitivity
+injection_coverage = _module.injection_coverage
 
 
 class TestSpectralCovariance(unittest.TestCase):
