@@ -1,0 +1,116 @@
+{
+  "project": "Carbon monoxide in WASP-39 b",
+  "repository": "https://github.com/Biswajit1999/exoplanet-atmosphere-signal",
+  "files": [
+    {
+      "label": "Research reference",
+      "path": "data/research-reference.json",
+      "role": "Data and provenance"
+    },
+    {
+      "label": "Demo",
+      "path": "data/example/demo.csv",
+      "role": "Data and provenance"
+    },
+    {
+      "label": "Notes for data/raw",
+      "path": "data/raw/README.md",
+      "role": "Data and provenance"
+    },
+    {
+      "label": "Project",
+      "path": "web-react/public/project.json",
+      "role": "Data and provenance"
+    },
+    {
+      "label": "Benchmarks",
+      "path": "web-react/public/results/benchmarks.json",
+      "role": "Tables and numerical results"
+    },
+    {
+      "label": "Summary",
+      "path": "web-react/public/results/summary.json",
+      "role": "Tables and numerical results"
+    },
+    {
+      "label": "Warnings",
+      "path": "web-react/public/results/warnings.json",
+      "role": "Tables and numerical results"
+    },
+    {
+      "label": "Fig01 spectrum",
+      "path": "figures/fig01_spectrum.json",
+      "role": "Tables and numerical results"
+    },
+    {
+      "label": "Fig02 sub band samples",
+      "path": "figures/fig02_sub_band_samples.json",
+      "role": "Tables and numerical results"
+    },
+    {
+      "label": "Fig03 contrast",
+      "path": "figures/fig03_contrast.json",
+      "role": "Tables and numerical results"
+    },
+    {
+      "label": "Fig04 sensitivity",
+      "path": "figures/fig04_sensitivity.json",
+      "role": "Tables and numerical results"
+    },
+    {
+      "label": "Fig05 fixed curve residuals",
+      "path": "figures/fig05_fixed_curve_residuals.json",
+      "role": "Tables and numerical results"
+    },
+    {
+      "label": "Fig01 spectrum",
+      "path": "web-react/public/figures/fig01_spectrum.json",
+      "role": "Tables and numerical results"
+    },
+    {
+      "label": "Fig02 sub band samples",
+      "path": "web-react/public/figures/fig02_sub_band_samples.json",
+      "role": "Tables and numerical results"
+    },
+    {
+      "label": "Fig03 contrast",
+      "path": "web-react/public/figures/fig03_contrast.json",
+      "role": "Tables and numerical results"
+    },
+    {
+      "label": "Fig04 sensitivity",
+      "path": "web-react/public/figures/fig04_sensitivity.json",
+      "role": "Tables and numerical results"
+    },
+    {
+      "label": "Fig01 spectrum",
+      "path": "figures/fig01_spectrum.png",
+      "role": "Figures"
+    },
+    {
+      "label": "Fig01 spectrum",
+      "path": "figures/fig01_spectrum.svg",
+      "role": "Figures"
+    },
+    {
+      "label": "Fig02 sub band samples",
+      "path": "figures/fig02_sub_band_samples.png",
+      "role": "Figures"
+    },
+    {
+      "label": "Fig02 sub band samples",
+      "path": "figures/fig02_sub_band_samples.svg",
+      "role": "Figures"
+    },
+    {
+      "label": "Fig03 contrast",
+      "path": "figures/fig03_contrast.png",
+      "role": "Figures"
+    },
+    {
+      "label": "Fig03 contrast",
+      "path": "figures/fig03_contrast.svg",
+      "role": "Figures"
+    }
+  ]
+}

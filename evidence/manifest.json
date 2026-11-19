@@ -1,0 +1,372 @@
+{
+  "schema": 1,
+  "project": "Carbon monoxide in WASP-39 b",
+  "repository": "https://github.com/Biswajit1999/exoplanet-atmosphere-signal",
+  "files": [
+    {
+      "label": "Research reference",
+      "path": "data/research-reference.json",
+      "role": "Data and provenance",
+      "bytes": 724,
+      "sha256": "30859b9acfc3b65fbb9036bac0eda48ae670498964b929809059941df59da511",
+      "hash_basis": "LF-normalised text",
+      "format": "JSON",
+      "keys": [
+        "title",
+        "description",
+        "equations",
+        "references",
+        "anchors"
+      ],
+      "arrays": {
+        "equations": 3,
+        "references": 1,
+        "anchors": 3
+      }
+    },
+    {
+      "label": "Demo",
+      "path": "data/example/demo.csv",
+      "role": "Data and provenance",
+      "bytes": 80,
+      "sha256": "2231cd2f44a7854fefcb8da60f527333a903c9c7a75fbd9154fdde13de699305",
+      "hash_basis": "LF-normalised text",
+      "format": "CSV",
+      "rows": 5,
+      "columns": 3,
+      "headers": [
+        "x",
+        "value",
+        "uncertainty"
+      ],
+      "preview": [
+        [
+          "0",
+          "0.10",
+          "0.02"
+        ],
+        [
+          "1",
+          "0.18",
+          "0.03"
+        ],
+        [
+          "2",
+          "0.14",
+          "0.02"
+        ],
+        [
+          "3",
+          "0.24",
+          "0.04"
+        ]
+      ]
+    },
+    {
+      "label": "Notes for data/raw",
+      "path": "data/raw/README.md",
+      "role": "Data and provenance",
+      "bytes": 122,
+      "sha256": "d0eb5596398ea30541e4414f1097f4f4b986c4d7d253627e8a33349ec93f9922",
+      "hash_basis": "LF-normalised text",
+      "format": "MD"
+    },
+    {
+      "label": "Project",
+      "path": "web-react/public/project.json",
+      "role": "Data and provenance",
+      "bytes": 2424,
+      "sha256": "5387f66af528c7103bff8bfdbec48387cb18a2c51a83df1acdee89543e85de0f",
+      "hash_basis": "LF-normalised text",
+      "format": "JSON",
+      "keys": [
+        "title",
+        "subtitle",
+        "question",
+        "dataMode",
+        "figures",
+        "methods",
+        "limitations"
+      ],
+      "arrays": {
+        "figures": 5,
+        "methods": 5,
+        "limitations": 5
+      }
+    },
+    {
+      "label": "Benchmarks",
+      "path": "web-react/public/results/benchmarks.json",
+      "role": "Tables and numerical results",
+      "bytes": 1907,
+      "sha256": "fc61b79e8ff8973f910a0a8865b1337cd84b710bfa8995e91f455377c8200751",
+      "hash_basis": "LF-normalised text",
+      "format": "JSON",
+      "records": 4,
+      "fields": [
+        "label",
+        "wall_time_seconds",
+        "peak_memory_mib",
+        "peak_memory_method",
+        "dataset_size",
+        "python_version",
+        "platform"
+      ]
+    },
+    {
+      "label": "Summary",
+      "path": "web-react/public/results/summary.json",
+      "role": "Tables and numerical results",
+      "bytes": 2235,
+      "sha256": "b3d451785f8a9ac4198fe599990b181456a8414a1826ed6c2839457ef33f0da6",
+      "hash_basis": "LF-normalised text",
+      "format": "JSON",
+      "keys": [
+        "project",
+        "data_kind",
+        "metrics",
+        "provenance",
+        "warnings"
+      ],
+      "arrays": {
+        "metrics": 6,
+        "warnings": 3
+      }
+    },
+    {
+      "label": "Warnings",
+      "path": "web-react/public/results/warnings.json",
+      "role": "Tables and numerical results",
+      "bytes": 495,
+      "sha256": "9cc498473be60ee61792096bf21f2d97a708d542cb24752a313b87abbc1a24f0",
+      "hash_basis": "LF-normalised text",
+      "format": "JSON",
+      "records": 3
+    },
+    {
+      "label": "Fig01 spectrum",
+      "path": "figures/fig01_spectrum.json",
+      "role": "Tables and numerical results",
+      "bytes": 402,
+      "sha256": "473c49f46ecfceb9cb79348812f5367ff40106d0d6519f68a21d9af967e3d4dc",
+      "hash_basis": "LF-normalised text",
+      "format": "JSON",
+      "keys": [
+        "figure",
+        "caption",
+        "data_kind",
+        "sample_size",
+        "git_commit",
+        "config_sha256",
+        "package_version"
+      ],
+      "arrays": {}
+    },
+    {
+      "label": "Fig02 sub band samples",
+      "path": "figures/fig02_sub_band_samples.json",
+      "role": "Tables and numerical results",
+      "bytes": 403,
+      "sha256": "f87c3e4895daa9696b6e3ce16ac12083d1990f308ecd97a7ad84590e8ee2f161",
+      "hash_basis": "LF-normalised text",
+      "format": "JSON",
+      "keys": [
+        "figure",
+        "caption",
+        "data_kind",
+        "sample_size",
+        "git_commit",
+        "config_sha256",
+        "package_version"
+      ],
+      "arrays": {}
+    },
+    {
+      "label": "Fig03 contrast",
+      "path": "figures/fig03_contrast.json",
+      "role": "Tables and numerical results",
+      "bytes": 397,
+      "sha256": "2cfb863009cf925d0082728e45d399a0719aaf90b786928aa6b4ea60e91eb735",
+      "hash_basis": "LF-normalised text",
+      "format": "JSON",
+      "keys": [
+        "figure",
+        "caption",
+        "data_kind",
+        "sample_size",
+        "git_commit",
+        "config_sha256",
+        "package_version"
+      ],
+      "arrays": {}
+    },
+    {
+      "label": "Fig04 sensitivity",
+      "path": "figures/fig04_sensitivity.json",
+      "role": "Tables and numerical results",
+      "bytes": 403,
+      "sha256": "b1f0c217fc1ee7c2361c931088aacbc93a313a8008126f2c7b847146502ce205",
+      "hash_basis": "LF-normalised text",
+      "format": "JSON",
+      "keys": [
+        "figure",
+        "caption",
+        "data_kind",
+        "sample_size",
+        "git_commit",
+        "config_sha256",
+        "package_version"
+      ],
+      "arrays": {}
+    },
+    {
+      "label": "Fig05 fixed curve residuals",
+      "path": "figures/fig05_fixed_curve_residuals.json",
+      "role": "Tables and numerical results",
+      "bytes": 438,
+      "sha256": "58b7bf4add31827dad0dacc1fce37b839880b7204e0ce4586d72c5b00ad25d5e",
+      "hash_basis": "LF-normalised text",
+      "format": "JSON",
+      "keys": [
+        "figure",
+        "caption",
+        "data_kind",
+        "sample_size",
+        "git_commit",
+        "config_sha256",
+        "package_version"
+      ],
+      "arrays": {}
+    },
+    {
+      "label": "Fig01 spectrum",
+      "path": "web-react/public/figures/fig01_spectrum.json",
+      "role": "Tables and numerical results",
+      "bytes": 402,
+      "sha256": "473c49f46ecfceb9cb79348812f5367ff40106d0d6519f68a21d9af967e3d4dc",
+      "hash_basis": "LF-normalised text",
+      "format": "JSON",
+      "keys": [
+        "figure",
+        "caption",
+        "data_kind",
+        "sample_size",
+        "git_commit",
+        "config_sha256",
+        "package_version"
+      ],
+      "arrays": {}
+    },
+    {
+      "label": "Fig02 sub band samples",
+      "path": "web-react/public/figures/fig02_sub_band_samples.json",
+      "role": "Tables and numerical results",
+      "bytes": 403,
+      "sha256": "f87c3e4895daa9696b6e3ce16ac12083d1990f308ecd97a7ad84590e8ee2f161",
+      "hash_basis": "LF-normalised text",
+      "format": "JSON",
+      "keys": [
+        "figure",
+        "caption",
+        "data_kind",
+        "sample_size",
+        "git_commit",
+        "config_sha256",
+        "package_version"
+      ],
+      "arrays": {}
+    },
+    {
+      "label": "Fig03 contrast",
+      "path": "web-react/public/figures/fig03_contrast.json",
+      "role": "Tables and numerical results",
+      "bytes": 397,
+      "sha256": "2cfb863009cf925d0082728e45d399a0719aaf90b786928aa6b4ea60e91eb735",
+      "hash_basis": "LF-normalised text",
+      "format": "JSON",
+      "keys": [
+        "figure",
+        "caption",
+        "data_kind",
+        "sample_size",
+        "git_commit",
+        "config_sha256",
+        "package_version"
+      ],
+      "arrays": {}
+    },
+    {
+      "label": "Fig04 sensitivity",
+      "path": "web-react/public/figures/fig04_sensitivity.json",
+      "role": "Tables and numerical results",
+      "bytes": 403,
+      "sha256": "b1f0c217fc1ee7c2361c931088aacbc93a313a8008126f2c7b847146502ce205",
+      "hash_basis": "LF-normalised text",
+      "format": "JSON",
+      "keys": [
+        "figure",
+        "caption",
+        "data_kind",
+        "sample_size",
+        "git_commit",
+        "config_sha256",
+        "package_version"
+      ],
+      "arrays": {}
+    },
+    {
+      "label": "Fig01 spectrum",
+      "path": "figures/fig01_spectrum.png",
+      "role": "Figures",
+      "bytes": 257804,
+      "sha256": "bd13f3c99cbd1cbff3e8d095a8cf9fdd1c168d0619e2de5c98e1730afa233733",
+      "hash_basis": "exact bytes",
+      "format": "PNG"
+    },
+    {
+      "label": "Fig01 spectrum",
+      "path": "figures/fig01_spectrum.svg",
+      "role": "Figures",
+      "bytes": 414298,
+      "sha256": "2c3d6f125505520d086b5fd16734891f6f2c6cf512530d510e6fb504fa530941",
+      "hash_basis": "LF-normalised text",
+      "format": "SVG"
+    },
+    {
+      "label": "Fig02 sub band samples",
+      "path": "figures/fig02_sub_band_samples.png",
+      "role": "Figures",
+      "bytes": 146810,
+      "sha256": "31ab523ee9956adfe202c92816d89006451654f165b7d9e7bed699ee3ab93164",
+      "hash_basis": "exact bytes",
+      "format": "PNG"
+    },
+    {
+      "label": "Fig02 sub band samples",
+      "path": "figures/fig02_sub_band_samples.svg",
+      "role": "Figures",
+      "bytes": 79299,
+      "sha256": "2143c7749e5bfbee63bd87fbed7eff6f31ba48ba73b914f946a23e3399d0703f",
+      "hash_basis": "LF-normalised text",
+      "format": "SVG"
+    },
+    {
+      "label": "Fig03 contrast",
+      "path": "figures/fig03_contrast.png",
+      "role": "Figures",
+      "bytes": 64195,
+      "sha256": "e822a7ed01437554a04def4a8144974fad724509f7b4ccdfa6903134ffee1111",
+      "hash_basis": "exact bytes",
+      "format": "PNG"
+    },
+    {
+      "label": "Fig03 contrast",
+      "path": "figures/fig03_contrast.svg",
+      "role": "Figures",
+      "bytes": 40769,
+      "sha256": "f5b2a7ea62e38c3e62b125c4043a3bac7ab8d77a7ac49499cdebd1b0a0682c0e",
+      "hash_basis": "LF-normalised text",
+      "format": "SVG"
+    }
+  ]
+}
