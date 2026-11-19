@@ -1,0 +1,43 @@
+{
+  "schema": 1,
+  "project": "Carbon monoxide in WASP-39 b",
+  "tables": [
+    {
+      "path": "data/example/demo.csv",
+      "label": "Demo",
+      "role": "Data and provenance",
+      "rows": 5,
+      "width_mismatches": 0,
+      "columns": [
+        {
+          "name": "x",
+          "blank": 0,
+          "text": 0,
+          "finite": 5,
+          "nonfinite": 0,
+          "minimum": 0.0,
+          "maximum": 4.0
+        },
+        {
+          "name": "value",
+          "blank": 0,
+          "text": 0,
+          "finite": 5,
+          "nonfinite": 0,
+          "minimum": 0.1,
+          "maximum": 0.24
+        },
+        {
+          "name": "uncertainty",
+          "blank": 0,
+          "text": 0,
+          "finite": 5,
+          "nonfinite": 0,
+          "minimum": 0.02,
+          "maximum": 0.04
+        }
+      ]
+    }
+  ],
+  "excluded": []
+}
